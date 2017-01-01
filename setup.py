@@ -14,7 +14,7 @@ def read(*parts):
 
 setup(name="hitchvm",
     version=read('VERSION').replace('\n', ''),
-    description="DSL parser designed to execute .story files.",
+    description="Set up virtual machines on spec.",
     long_description=read('README.rst'),
     classifiers=[
         'Development Status :: 3 - Alpha',
