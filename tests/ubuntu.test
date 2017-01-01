@@ -1,0 +1,18 @@
+- name: Set up Ubuntu 16.04 VM, ssh in and print /etc/issue
+  preconditions:
+   boxcache: ubuntu-trusty-64.box
+  scenario:
+    - Run command: |
+        from hitchvm import Vagrant, StandardBox
+        from pexpect import EOF
+
+        box = StandardBox(".", "ubuntu-trusty-64")
+        vm = Vagrant(".", box)
+    - Run command: running_vm = vm.up()
+    - Run command: |
+        process = running_vm.cmd("cat /etc/issue").pexpect()
+        process.expect("Ubuntu 14.04")
+        process.expect(EOF)
+        process.close()
+    
+    - Run command: running_vm.destroy()

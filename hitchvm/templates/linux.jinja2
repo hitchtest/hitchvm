@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby
+$BOOTSTRAP_SCRIPT = <<EOF
+# echo Running bootstrap script...
+EOF
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "{{ machine_name }}"
+  config.vm.box_url = 'file://{{ location }}'
+  config.vm.network :private_network, ip: "192.168.63.9"
+  config.vm.provision :shell, privileged: false, :inline => $BOOTSTRAP_SCRIPT # see above
+  config.ssh.forward_x11 = true
+  config.ssh.insert_key = false
+  #config.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__exclude: ".git/"
+  #config.vbguest.auto_update = false
+
+  config.vm.provider :virtualbox do |virtualbox|
+    virtualbox.customize ["modifyvm", :id, "--memory", 1024]
+  end
+
+  config.vm.define :{{ underscored_name }} do |node|
+    node.vm.box = "{{ machine_name }}"
+    node.vm.hostname = "{{ machine_name }}"
+    node.vm.network :private_network, ip: "192.168.55.2"
+  end
+end

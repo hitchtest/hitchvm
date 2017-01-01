@@ -1,0 +1,2 @@
+recursive-include hitchvm *.py *.jinja2
+include VERSION
