@@ -11,10 +11,7 @@ TEMPLATE_DIR = Path(__file__).abspath().dirname().joinpath("templates")
 
 STANDARD_BOXES = {
     "ubuntu-trusty-64": {
-        "url": (
-            "https://cloud-images.ubuntu.com/vagrant/trusty/current/"
-            "trusty-server-cloudimg-amd64-vagrant-disk1.box",
-        ),
+        "url": "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box",
         "template": "linux.jinja2",
     }
 }
