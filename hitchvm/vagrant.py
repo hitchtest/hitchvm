@@ -125,6 +125,12 @@ class RunningVagrant(object):
         """
         return Command("vagrant", "ssh", "-c").in_dir(self._vagrant_template.vagrant_path)
 
+    def halt(self):
+        """
+        Stop the virtual machine, but do not destroy.
+        """
+        Command("vagrant")("halt").in_dir(self._vagrant_template.vagrant_path).run()
+
     def destroy(self):
         """
         Eliminate the virtual machine.
