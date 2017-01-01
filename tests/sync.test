@@ -1,0 +1,22 @@
+- name: Set up Ubuntu 16.04 VM and sync
+  preconditions:
+   boxcache: ubuntu-trusty-64.box
+   files:
+     syncedfile: hello
+  scenario:
+    - Run command: |
+        from hitchvm import Vagrant, StandardBox
+        from pexpect import EOF
+        from path import Path
+
+        box = StandardBox(".", "ubuntu-trusty-64")
+        vm = Vagrant(Path("."), box)
+        vm = vm.sync(Path("."), "/data/")
+    - Run command: running_vm = vm.up()
+    - Run command: |
+        process = running_vm.cmd("cat /data/syncedfile").pexpect()
+        process.expect("hello")
+        process.expect(EOF)
+        process.close()
+    
+    - Run command: running_vm.destroy()

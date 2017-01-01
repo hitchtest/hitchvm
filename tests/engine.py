@@ -22,6 +22,10 @@ class ExecutionEngine(hitchtest.ExecutionEngine):
         if self.path.state.exists():
             self.path.state.rmtree()
         self.path.state.mkdir()
+        
+        if "files" in self.preconditions:
+            for filename, contents in self.preconditions['files'].items():
+                self.path.state.joinpath(filename).write_text(contents)
 
         if self.settings.get("boxcache", True):
             if "boxcache" in self.preconditions:

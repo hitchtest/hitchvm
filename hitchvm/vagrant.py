@@ -3,6 +3,7 @@ from jinja2 import FileSystemLoader
 from commandlib import Command
 from hitchvm import utils
 from path import Path
+import copy
 
 
 TEMPLATE_DIR = Path(__file__).abspath().dirname().joinpath("templates")
@@ -73,6 +74,8 @@ class Vagrant(object):
         self._path = Path(path).abspath()
         self._machine = machine
         self._id = utils.random_id(6)
+        self._sync_from_location = None
+        self._sync_to_location = None
 
     @property
     def vagrant_path(self):
@@ -90,7 +93,16 @@ class Vagrant(object):
             machine_name=self.machine_name,
             underscored_name=self.machine_name.replace("-", "_"),
             location=self._machine.location,
+            sync_from_location=self._sync_from_location,
+            sync_to_location=self._sync_to_location,
         )
+
+    def sync(self, from_location, to_location):
+        new_vagrant = copy.copy(self)
+        new_vagrant._sync_from_location = Path(from_location).abspath()
+        new_vagrant._sync_to_location = to_location
+        assert new_vagrant._sync_from_location.exists()
+        return new_vagrant
 
     def up(self):
         """
