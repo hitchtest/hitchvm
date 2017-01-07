@@ -36,7 +36,7 @@ setup(name="hitchvm",
     url='https://github.com/hitchtest/hitchvm',
     license='AGPL',
     install_requires=[
-        'commandlib>=0.2.4', 'jinja2', 'path.py',
+        'commandlib>=0.2.5', 'jinja2', 'path.py',
     ],
     packages=find_packages(exclude=["docs", "tests"]),
     package_data={},

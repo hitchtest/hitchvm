@@ -16,8 +16,12 @@
         process.expect(EOF)
         process.close()
     - Run command: |
-        vm.save_snapshot("withpython3")
+        vm.take_snapshot("withpython3")
         vm.halt()
+
+        assert not vm.snapshot_exists("nonexistent")
+        assert not vm.snapshot_exists("with")
+        assert vm.snapshot_exists("withpython3")
 
         vm.restore_snapshot("withpython3")
         process = vm.cmd("python3 --version").pexpect()

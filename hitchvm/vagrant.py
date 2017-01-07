@@ -132,11 +132,17 @@ class VirtualMachine(object):
         """
         self._cmd("halt").run()
 
-    def save_snapshot(self, name):
+    def take_snapshot(self, name):
         """
         Save a named snapshot of the virtual machine.
         """
         self._cmd("snapshot", "save", name).run()
+
+    def snapshot_exists(self, name):
+        """
+        Return True if snapshot with name exists.
+        """
+        return name in self._cmd("snapshot", "list").output().strip().split('\n')
 
     def restore_snapshot(self, name):
         """
