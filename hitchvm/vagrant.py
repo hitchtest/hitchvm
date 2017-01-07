@@ -150,6 +150,12 @@ class VirtualMachine(object):
         """
         self._cmd("snapshot", "restore", name, "--no-provision").run()
 
+    def sync(self):
+        """
+        Resync files that the vm template was configured to sync with.
+        """
+        self._cmd("rsync").run()
+
     def destroy(self):
         """
         Eliminate the virtual machine and template files.

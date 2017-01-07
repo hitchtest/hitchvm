@@ -10,13 +10,20 @@
         from path import Path
 
         box = StandardBox(".", "ubuntu-trusty-64")
-        vm = Vagrant(Path("."), box)
-        vm = vm.sync(Path("."), "/data/")
-    - Run command: running_vm = vm.up()
+        vm_template = Vagrant(Path("."), box)
+        vm_template = vm_template.sync(Path("."), "/data/")
+    - Run command: vm = vm_template.up()
     - Run command: |
-        process = running_vm.cmd("cat /data/syncedfile").pexpect()
+        process = vm.cmd("cat /data/syncedfile").pexpect()
         process.expect("hello")
         process.expect(EOF)
         process.close()
-    
-    - Run command: running_vm.destroy()
+
+    - Run command: vm.cmd("echo goodbye > /data/syncedfile").run()
+    - Run command: vm.sync()
+    - Run command: |
+        process = vm.cmd("cat /data/syncedfile").pexpect()
+        process.expect("hello")
+        process.expect(EOF)
+        process.close()
+    - Run command: vm.destroy()
