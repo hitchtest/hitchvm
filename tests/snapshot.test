@@ -1,0 +1,27 @@
+- name: Set up Ubuntu 16.04 VM, install python, snapshot, halt and restore snapshot
+  preconditions:
+   boxcache: ubuntu-trusty-64.box
+  scenario:
+    - Run command: |
+        from hitchvm import Vagrant, StandardBox
+        from pexpect import EOF
+        from path import Path
+
+        box = StandardBox(".", "ubuntu-trusty-64")
+        vm_template = Vagrant(Path("."), box)
+        vm_template = vm_template.sync(Path("."), "/data/")
+    - Run command: vm = vm_template.up()
+    - Run command: |
+        process = vm.cmd("sudo apt-get install python3 -y").pexpect()
+        process.expect(EOF)
+        process.close()
+    - Run command: |
+        vm.save_snapshot("withpython3")
+        vm.halt()
+
+        vm.restore_snapshot("withpython3")
+        process = vm.cmd("python3 --version").pexpect()
+        process.expect("Python")
+        process.expect(EOF)
+        process.close()
+    - Run command: vm.destroy()

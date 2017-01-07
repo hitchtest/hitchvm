@@ -111,29 +111,42 @@ class Vagrant(object):
         self.vagrant_path.mkdir()
         self.vagrant_path.joinpath("Vagrantfile").write_text(self.vagrant_file)
         Command("vagrant")("up").in_dir(self.vagrant_path).run()
-        return RunningVagrant(self)
+        return VirtualMachine(self)
 
 
-class RunningVagrant(object):
+class VirtualMachine(object):
     def __init__(self, vagrant_template):
         self._vagrant_template = vagrant_template
+        self._cmd = Command("vagrant").in_dir(self._vagrant_template.vagrant_path)
 
     @property
     def cmd(self):
         """
-        Command to run within the vagrant box.
+        Base command to run bash command within the vagrant box.
         """
-        return Command("vagrant", "ssh", "-c").in_dir(self._vagrant_template.vagrant_path)
+        return self._cmd("ssh", "-c")
 
     def halt(self):
         """
         Stop the virtual machine, but do not destroy.
         """
-        Command("vagrant")("halt").in_dir(self._vagrant_template.vagrant_path).run()
+        self._cmd("halt").run()
+
+    def save_snapshot(self, name):
+        """
+        Save a named snapshot of the virtual machine.
+        """
+        self._cmd("snapshot", "save", name).run()
+
+    def restore_snapshot(self, name):
+        """
+        Restore a snapshot of the virtual machine.
+        """
+        self._cmd("snapshot", "restore", name, "--no-provision").run()
 
     def destroy(self):
         """
-        Eliminate the virtual machine.
+        Eliminate the virtual machine and template files.
         """
-        Command("vagrant")("destroy", "-f").in_dir(self._vagrant_template.vagrant_path).run()
+        self._cmd("destroy", "-f").run()
         Path(self._vagrant_template.vagrant_path).rmtree(ignore_errors=True)
