@@ -70,9 +70,9 @@ class Vagrant(object):
     def __init__(self, path, machine):
         self._path = Path(path).abspath()
         self._machine = machine
-        self._id = utils.random_id(6)
         self._sync_from_location = None
         self._sync_to_location = None
+        self._cmd = Command("vagrant").in_dir(self.vagrant_path)
 
     @property
     def vagrant_path(self):
@@ -80,7 +80,7 @@ class Vagrant(object):
 
     @property
     def machine_name(self):
-        return "{0}-{1}".format(self._machine.name, self._id)
+        return self._machine.name
 
     @property
     def vagrant_file(self):
@@ -94,7 +94,7 @@ class Vagrant(object):
             sync_to_location=self._sync_to_location,
         )
 
-    def sync(self, from_location, to_location):
+    def synced_with(self, from_location, to_location):
         new_vagrant = copy.copy(self)
         new_vagrant._sync_from_location = Path(from_location).abspath()
         new_vagrant._sync_to_location = to_location
@@ -111,13 +111,6 @@ class Vagrant(object):
         self.vagrant_path.mkdir()
         self.vagrant_path.joinpath("Vagrantfile").write_text(self.vagrant_file)
         Command("vagrant")("up").in_dir(self.vagrant_path).run()
-        return VirtualMachine(self)
-
-
-class VirtualMachine(object):
-    def __init__(self, vagrant_template):
-        self._vagrant_template = vagrant_template
-        self._cmd = Command("vagrant").in_dir(self._vagrant_template.vagrant_path)
 
     @property
     def cmd(self):
@@ -161,4 +154,4 @@ class VirtualMachine(object):
         Eliminate the virtual machine and template files.
         """
         self._cmd("destroy", "-f").run()
-        Path(self._vagrant_template.vagrant_path).rmtree(ignore_errors=True)
+        Path(self.vagrant_path).rmtree(ignore_errors=True)

@@ -10,9 +10,9 @@
         from path import Path
 
         box = StandardBox(".", "ubuntu-trusty-64")
-        vm_template = Vagrant(Path("."), box)
-        vm_template = vm_template.sync(Path("."), "/data/")
-    - Run command: vm = vm_template.up()
+        vm = Vagrant(Path("."), box)
+        vm = vm.synced_with(Path("."), "/data/")
+    - Run command: vm.up()
     - Run command: |
         process = vm.cmd("cat /data/syncedfile").pexpect()
         process.expect("hello")

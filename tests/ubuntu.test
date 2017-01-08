@@ -8,11 +8,10 @@
 
         box = StandardBox(".", "ubuntu-trusty-64")
         vm = Vagrant(".", box)
-    - Run command: running_vm = vm.up()
+    - Run command: vm.up()
     - Run command: |
-        process = running_vm.cmd("cat /etc/issue").pexpect()
+        process = vm.cmd("cat /etc/issue").pexpect()
         process.expect("Ubuntu 14.04")
         process.expect(EOF)
         process.close()
-    
-    - Run command: running_vm.destroy()
+    - Run command: vm.destroy()
