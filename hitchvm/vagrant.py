@@ -143,6 +143,12 @@ class Vagrant(object):
         """
         self._cmd("snapshot", "restore", name, "--no-provision").run()
 
+    def delete_snapshot(self, name):
+        """
+        Delete a snapshot of the virtual machine.
+        """
+        self._cmd("snapshot", "delete", name).run()
+
     def sync(self):
         """
         Resync files that the vm template was configured to sync with.

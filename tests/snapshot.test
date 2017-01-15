@@ -28,4 +28,8 @@
         process.expect("Python")
         process.expect(EOF)
         process.close()
+        vm.halt()
+
+        vm.delete_snapshot("withpython3")
+        assert not vm.snapshot_exists("withpython3")
     - Run command: vm.destroy()
