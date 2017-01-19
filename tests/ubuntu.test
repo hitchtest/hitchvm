@@ -7,7 +7,7 @@
         from pexpect import EOF
 
         box = StandardBox(".", "ubuntu-trusty-64")
-        vm = Vagrant(".", box)
+        vm = Vagrant("myvm", box, ".")
     - Run command: vm.up()
     - Run command: |
         process = vm.cmd("cat /etc/issue").pexpect()

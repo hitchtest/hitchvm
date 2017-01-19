@@ -67,12 +67,19 @@ class StandardBox(VagrantBox):
 
 
 class Vagrant(object):
-    def __init__(self, path, machine):
+    def __init__(self, name, machine, path):
+        self._name = name
         self._path = Path(path).abspath()
+        assert self._path.exists()
+        assert isinstance(machine, VagrantBox)
         self._machine = machine
         self._sync_from_location = None
         self._sync_to_location = None
         self._cmd = Command("vagrant").in_dir(self.vagrant_path)
+
+    @property
+    def name(self):
+        return self._name
 
     @property
     def vagrant_path(self):
@@ -80,7 +87,7 @@ class Vagrant(object):
 
     @property
     def machine_name(self):
-        return self._machine.name
+        return "{0}-{1}".format(self.name, self._machine.name)
 
     @property
     def vagrant_file(self):
