@@ -13,6 +13,10 @@ STANDARD_BOXES = {
     "ubuntu-trusty-64": {
         "url": "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box",
         "template": "linux.jinja2",
+    },
+    "macos-sierra": {
+        "url": "https://atlas.hashicorp.com/jhcook/boxes/macos-sierra/versions/10.12.2/providers/virtualbox.box",
+        "template": "macos-sierra.jinja2",
     }
 }
 
