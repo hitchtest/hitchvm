@@ -1,0 +1,1 @@
+- Set up sierra like so https://github.com/monfresh/laptop
