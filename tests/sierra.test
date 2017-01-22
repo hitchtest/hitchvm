@@ -9,7 +9,7 @@
         from pexpect import EOF
 
         box = StandardBox(".", "macos-sierra")
-        vm = Vagrant("myvm", box, ".")
+        vm = Vagrant("macostest", box, ".")
     - Run command: vm.up()
     - Run command: |
         process = vm.cmd("sw_vers -productVersion").pexpect()
