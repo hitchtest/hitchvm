@@ -146,6 +146,8 @@ class Vagrant(object):
         """
         Return True if snapshot with name exists.
         """
+        if not self.vagrant_path.exists():
+            return False
         return name in self._cmd("snapshot", "list").output().strip().split('\n')
 
     def restore_snapshot(self, name):

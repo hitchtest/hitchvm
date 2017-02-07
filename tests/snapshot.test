@@ -8,8 +8,10 @@
         from path import Path
 
         box = StandardBox(".", "ubuntu-trusty-64")
-        vm = Vagrant(Path("."), box)
+        vm = Vagrant("myvm", box, ".")
         vm = vm.synced_with(Path("."), "/data/")
+
+        assert not vm.snapshot_exists("nonexistent")
     - Run command: vm.up()
     - Run command: |
         process = vm.cmd("sudo apt-get install python3 -y").pexpect()
