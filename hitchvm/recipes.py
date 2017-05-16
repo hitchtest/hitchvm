@@ -10,3 +10,14 @@ class Brew(Recipe):
         ).run()
         cmd("brew update").run()
         cmd("brew upgrade --all").run()
+
+
+class AptGet(Recipe):
+    def __init__(self, *packages):
+        for package in packages:
+            assert isinstance(package, str), "package names must be strings"
+        self._packages = packages
+
+    def run(self, cmd):
+        for package in self._packages:
+            cmd("apt-get install {0} -y".format(package))

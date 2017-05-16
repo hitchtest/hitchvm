@@ -1,0 +1,18 @@
+- name: Set up Ubuntu 16.04 VM and Apt-Get install python
+  preconditions:
+   boxcache: ubuntu-trusty-64.box
+  scenario:
+    - Run command: |
+        from hitchvm import Vagrant, StandardBox
+        from hitchvm.recipes import AptGet
+        from pexpect import EOF
+
+        box = StandardBox(".", "ubuntu-trusty-64", recipe=AptGet("python"))
+        vm = Vagrant("myvm", box, ".")
+    - Run command: vm.up()
+    - Run command: |
+        process = vm.cmd("python -V").pexpect()
+        process.expect("Python")
+        process.expect(EOF)
+        process.close()
+    - Run command: vm.destroy()
