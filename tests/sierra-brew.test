@@ -1,0 +1,20 @@
+- name: Mac OS Sierra
+  description: |
+    Set up Sierra, ssh in and print version number - 10.12
+  preconditions:
+   boxcache: macos-sierra.box
+  scenario:
+    - Run command: |
+        from hitchvm import Vagrant, StandardBox
+        from hitchvm.recipes import Brew
+        from pexpect import EOF
+
+        box = StandardBox(".", "macos-sierra", recipe=Brew())
+        vm = Vagrant("macostest", box, ".")
+    - Run command: vm.up()
+    - Run command: |
+        process = vm.cmd("brew --version").pexpect()
+        process.expect("Homebrew")
+        process.expect(EOF)
+        process.close()
+    - Run command: vm.destroy()

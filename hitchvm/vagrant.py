@@ -1,6 +1,7 @@
 from jinja2.environment import Environment
 from jinja2 import FileSystemLoader
 from commandlib import Command
+from hitchvm.recipes import Recipe
 from hitchvm import utils
 from path import Path
 import copy
@@ -42,9 +43,17 @@ class VagrantBox(object):
 
 
 class StandardBox(VagrantBox):
-    def __init__(self, download_folder, name):
+    def __init__(self, download_folder, name, recipe=None):
         self._download_folder = Path(download_folder).abspath()
         self._name = name
+
+        if recipe is not None:
+            assert isinstance(recipe, Recipe)
+        self._recipe = recipe
+
+    @property
+    def recipe(self):
+        return self._recipe
 
     @property
     def name(self):
@@ -122,6 +131,8 @@ class Vagrant(object):
         self.vagrant_path.mkdir()
         self.vagrant_path.joinpath("Vagrantfile").write_text(self.vagrant_file)
         Command("vagrant")("up").in_dir(self.vagrant_path).run()
+        if self._machine.recipe is not None:
+            self._machine.recipe.run(self.cmd)
 
     @property
     def cmd(self):
