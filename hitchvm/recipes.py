@@ -21,3 +21,10 @@ class AptGet(Recipe):
     def run(self, cmd):
         for package in self._packages:
             cmd("apt-get install {0} -y".format(package))
+
+class MacPython(Brew):
+    def run(self, cmd):
+        super(MacPython, self).run(cmd)
+        cmd("brew install python").run()
+        cmd("brew install python3").run()
+        cmd("pip install --upgrade virtualenv").run()

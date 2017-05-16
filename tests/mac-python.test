@@ -1,0 +1,20 @@
+- name: Mac OS Python
+  description: |
+    Set up Mac OS with python.
+  preconditions:
+   boxcache: macos-sierra.box
+  scenario:
+    - Run command: |
+        from hitchvm import Vagrant, StandardBox
+        from hitchvm.recipes import MacPython
+        from pexpect import EOF
+
+        box = StandardBox(".", "macos-sierra", recipe=MacPython())
+        vm = Vagrant("macostest", box, ".")
+    - Run command: vm.up()
+    - Run command: |
+        process = vm.cmd("python3 --version").pexpect()
+        process.expect("Python")
+        process.expect(EOF)
+        process.close()
+    - Run command: vm.destroy()
