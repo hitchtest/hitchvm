@@ -2,7 +2,10 @@
   description: |
     Set up Sierra, ssh in and print version number - 10.12
   preconditions:
-   boxcache: macos-sierra.box
+    boxcache: macos-sierra.box
+    files:
+      tosync/example: |
+        This file should be synced
   scenario:
     - Run command: |
         from hitchvm import Vagrant, StandardBox
@@ -10,10 +13,16 @@
 
         box = StandardBox(".", "macos-sierra")
         vm = Vagrant("macostest", box, ".")
+        vm = vm.synced_with("tosync/", "/hitchvm/")
     - Run command: vm.up()
     - Run command: |
         process = vm.cmd("sw_vers -productVersion").pexpect()
         process.expect("10.12")
+        process.expect(EOF)
+        process.close()
+    - Run command: |
+        process = vm.cmd("cat /hitchvm/example").pexpect()
+        process.expect("file should be synced")
         process.expect(EOF)
         process.close()
     - Run command: vm.destroy()

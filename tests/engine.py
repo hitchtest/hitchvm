@@ -25,7 +25,11 @@ class ExecutionEngine(hitchtest.ExecutionEngine):
 
         if "files" in self.preconditions:
             for filename, contents in self.preconditions['files'].items():
-                self.path.state.joinpath(filename).write_text(contents)
+                directory = self.path.project.joinpath("state", filename).dirname()
+                if not directory.exists():
+                    directory.makedirs()
+                self.path.project.joinpath("state", filename).write_text(contents)
+
 
         if self.settings.get("boxcache", True):
             if "boxcache" in self.preconditions:

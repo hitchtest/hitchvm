@@ -7,7 +7,7 @@ Vagrant.configure("2") do |config|
   config.vm.box_url = 'file://{{ location }}'
 
   {% if sync_from_location %}
-  config.vm.synced_folder "{{ sync_from_location }}", "{{ sync_to_location }}", :disabled => true
+  config.vm.synced_folder "{{ sync_from_location }}", "{{ sync_to_location }}", type: "rsync"
   {% endif %}
 
   config.vm.provider "virtualbox" do |vb|
