@@ -18,6 +18,10 @@ STANDARD_BOXES = {
     "macos-sierra": {
         "url": "https://atlas.hashicorp.com/jhcook/boxes/macos-sierra/versions/10.12.2/providers/virtualbox.box",
         "template": "macos-sierra.jinja2",
+    },
+    "macos-elcapitan": {
+        "url": "https://atlas.hashicorp.com/jhcook/boxes/osx-elcapitan-10.11/versions/10.11.6/providers/virtualbox.box",
+        "template": "macos-elcapitan.jinja2",
     }
 }
 

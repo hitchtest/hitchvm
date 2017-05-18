@@ -1,0 +1,28 @@
+- name: Mac OS El Capitan
+  description: |
+    Set up El Capitan, ssh in and print version number - 10.11
+  preconditions:
+    boxcache: macos-elcapitan.box
+    files:
+      tosync/example: |
+        This file should be synced
+  scenario:
+    - Run command: |
+        from hitchvm import Vagrant, StandardBox
+        from pexpect import EOF
+
+        box = StandardBox(".", "macos-elcapitan")
+        vm = Vagrant("macoselctest", box, ".")
+        vm = vm.synced_with("tosync/", "/hitchvm/")
+    - Run command: vm.up()
+    - Run command: |
+        process = vm.cmd("sw_vers -productVersion").pexpect()
+        process.expect("10.11")
+        process.expect(EOF)
+        process.close()
+    - Run command: |
+        process = vm.cmd("cat /hitchvm/example").pexpect()
+        process.expect("file should be synced")
+        process.expect(EOF)
+        process.close()
+    - Run command: vm.destroy()
